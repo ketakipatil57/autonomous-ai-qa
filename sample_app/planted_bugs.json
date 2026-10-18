@@ -1,0 +1,44 @@
+{
+  "bugs": [
+    {
+      "id": "BUG-01",
+      "title": "Login accepts a wrong password for the valid email",
+      "page": "/login.html",
+      "trigger": "Enter test@demo.com with any wrong password",
+      "expected": "Shows error 'Invalid email or password' and user stays on the login page",
+      "actual": "Login succeeds and user is redirected to index.html"
+    },
+    {
+      "id": "BUG-02",
+      "title": "Checkout total is wrong when quantity is 2 or more",
+      "page": "/checkout.html",
+      "trigger": "Add the same product twice, check total",
+      "expected": "Checkout total equals the sum of (price x quantity) for all cart items",
+      "actual": "Checkout total calculates base unit price once regardless of quantity"
+    },
+    {
+      "id": "BUG-03",
+      "title": "Checkout allows placing an order with an empty cart",
+      "page": "/checkout.html",
+      "trigger": "Open checkout with empty cart, click Place order",
+      "expected": "Shows error 'Your cart is empty' and does not place an order",
+      "actual": "Shows 'Order placed' and allows order completion despite empty cart"
+    },
+    {
+      "id": "BUG-04",
+      "title": "Empty email on login does not show the required message",
+      "page": "/login.html",
+      "trigger": "Submit login with empty fields",
+      "expected": "Shows error 'Email and password are required'",
+      "actual": "No validation message is displayed"
+    },
+    {
+      "id": "BUG-05",
+      "title": "Cart count badge does not update after adding a second item",
+      "page": "/index.html",
+      "trigger": "Add two different products, check badge",
+      "expected": "Cart badge displays total item count (2)",
+      "actual": "Cart badge remains at 1 after adding second distinct product"
+    }
+  ]
+}

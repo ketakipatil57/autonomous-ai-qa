@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEasy - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a href="/index.html" class="logo">ShopEasy</a>
+    <nav>
+      <a href="/index.html">Products</a>
+      <a href="/checkout.html" class="cart-badge-container">
+        Checkout (<span id="cart-badge" class="badge">0</span>)
+      </a>
+      <a href="/login.html" id="nav-login-link" class="active">Login</a>
+    </nav>
+  </header>
+
+  <main style="max-width: 480px;">
+    <div class="card" style="margin-top: 2rem;">
+      <h1 style="text-align: center; margin-bottom: 0.5rem;">Account Login</h1>
+      <p style="text-align: center; color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">
+        Demo valid user: <code>test@demo.com</code> / <code>Test@123</code>
+      </p>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="Email" autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password">
+        </div>
+
+        <button type="submit" id="login-button" class="btn" style="width: 100%; margin-top: 0.5rem;">Login</button>
+      </form>
+
+      <div id="login-message" class="message"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div>ShopEasy Sample App &copy; 2026 Tower of Hanoi</div>
+    <div class="bug-toggle-bar">
+      <span>Sample Bugs: <span id="bug-status-indicator" class="bug-status-tag">ON</span></span>
+      <a href="#" id="toggle-bugs-btn" class="toggle-link">Toggle Bugs</a>
+    </div>
+  </footer>
+
+  <script src="/config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

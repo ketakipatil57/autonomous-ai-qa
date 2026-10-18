@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEasy - Products</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a href="/index.html" class="logo">ShopEasy</a>
+    <nav>
+      <a href="/index.html" class="active">Products</a>
+      <a href="/checkout.html" class="cart-badge-container">
+        Checkout (<span id="cart-badge" class="badge">0</span>)
+      </a>
+      <a href="/login.html" id="nav-login-link">Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+      <h1>Featured Products</h1>
+      <div class="card" style="padding: 0.75rem 1.25rem; font-size: 0.95rem;">
+        Cart: <strong id="cart-count">0</strong> items | Subtotal: <strong id="cart-subtotal">$0.00</strong>
+        <a href="/checkout.html" class="btn" style="padding: 0.35rem 0.75rem; margin-left: 0.75rem; font-size: 0.85rem;">View Cart</a>
+      </div>
+    </div>
+
+    <div id="products-container" class="products-grid">
+      <!-- Products dynamically rendered by app.js -->
+    </div>
+  </main>
+
+  <footer>
+    <div>ShopEasy Sample App &copy; 2026 Tower of Hanoi</div>
+    <div class="bug-toggle-bar">
+      <span>Sample Bugs: <span id="bug-status-indicator" class="bug-status-tag">ON</span></span>
+      <a href="#" id="toggle-bugs-btn" class="toggle-link">Toggle Bugs</a>
+    </div>
+  </footer>
+
+  <script src="/config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

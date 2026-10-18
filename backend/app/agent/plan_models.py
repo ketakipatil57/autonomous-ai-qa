@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 from pydantic import BaseModel, Field, field_validator
 
 ActionType = Literal[
@@ -127,3 +127,49 @@ class SiteMap(BaseModel):
     app_url: str
     pages: list[PageData] = Field(default_factory=list)
     explored_count: int = 0
+
+
+# --- Verifier and Reporter Schemas (Section 6.8 & 6.9) ---
+
+TestStatus = Literal["PASSED", "FAILED", "NEEDS_REVIEW"]
+SeverityType = Literal["LOW", "MEDIUM", "HIGH"]
+
+
+class TestResult(BaseModel):
+    """Verified test outcome with status classification, reason, and recheck history."""
+
+    __test__ = False
+
+    id: str = Field(..., description="Unique test result UUID")
+    session_id: str
+    tc_id: str
+    status: TestStatus
+    reason: str
+    first_run_outcome: str
+    recheck_outcome: str | None = None
+    duration_ms: float = 0.0
+    failure_message: str | None = None
+    explanation: str | None = None
+    screenshot_path: str | None = None
+    evidence_path: str | None = None
+    report_path: str | None = None
+
+
+class BugReport(BaseModel):
+    """Structured evidence-backed bug report for confirmed test failures."""
+
+    id: str = Field(..., description="Report UUID or identifier")
+    session_id: str
+    tc_id: str
+    test_result_id: str | None = None
+    bug_code: str = Field(..., description="Display code, e.g. BUG-session-1")
+    title: str
+    severity: SeverityType
+    reproduction_steps: list[str] = Field(default_factory=list)
+    expected: str
+    actual: str
+    status: str = "CONFIRMED"
+    environment: dict[str, Any] = Field(default_factory=dict)
+    evidence: dict[str, Any] = Field(default_factory=dict)
+    report_path: str | None = None
+    created_at: str

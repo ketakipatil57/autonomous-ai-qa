@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bug Report - {{ bug.bug_code }}</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --success: #16a34a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .report-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .report-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    .badge-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-id { background: #e0e7ff; color: #3730a3; }
+    .badge-status { background: #fee2e2; color: #991b1b; }
+    .badge-sev-high { background: #fee2e2; color: #991b1b; }
+    .badge-sev-medium { background: #fef3c7; color: #92400e; }
+    .badge-sev-low { background: #e0f2fe; color: #075985; }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .report-section {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .report-section:last-child {
+      border-bottom: none;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+
+    /* Comparison cards */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 650px) {
+      .comparison-grid { grid-template-columns: 1fr; }
+    }
+
+    .comp-box {
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+    }
+
+    .comp-box.expected {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .comp-box.actual {
+      background: var(--danger-bg);
+      border-color: var(--danger-border);
+    }
+
+    .comp-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .comp-box.expected .comp-title { color: #166534; }
+    .comp-box.actual .comp-title { color: #991b1b; }
+
+    /* Reproduction Steps */
+    ol.steps-list {
+      padding-left: 1.5rem;
+    }
+
+    ol.steps-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Evidence */
+    .screenshot-container {
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .screenshot-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .log-table th, .log-table td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .log-table th {
+      background: #f1f5f9;
+      font-weight: 600;
+    }
+
+    .env-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .env-item span {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .env-item strong {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .no-data {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="report-card">
+      <div class="report-header">
+        <div class="badge-group">
+          <span class="badge badge-id">{{ bug.bug_code }}</span>
+          <span class="badge badge-status">{{ bug.status }}</span>
+          {% if bug.severity == 'HIGH' %}
+            <span class="badge badge-sev-high">Severity: HIGH</span>
+          {% elif bug.severity == 'MEDIUM' %}
+            <span class="badge badge-sev-medium">Severity: MEDIUM</span>
+          {% else %}
+            <span class="badge badge-sev-low">Severity: LOW</span>
+          {% endif %}
+        </div>
+        <h1>{{ bug.title }}</h1>
+      </div>
+
+      <!-- 1. Expected vs Actual -->
+      <div class="report-section">
+        <h2>Comparison</h2>
+        <div class="comparison-grid">
+          <div class="comp-box expected">
+            <div class="comp-title">Expected Behaviour</div>
+            <p>{{ bug.expected }}</p>
+          </div>
+          <div class="comp-box actual">
+            <div class="comp-title">Actual Behaviour</div>
+            <p>{{ bug.actual }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Reproduction Steps -->
+      <div class="report-section">
+        <h2>Reproduction Steps</h2>
+        {% if bug.reproduction_steps %}
+          <ol class="steps-list">
+            {% for step in bug.reproduction_steps %}
+              <li>{{ step }}</li>
+            {% endfor %}
+          </ol>
+        {% else %}
+          <p class="no-data">No reproduction steps available.</p>
+        {% endif %}
+      </div>
+
+      <!-- 3. Evidence -->
+      <div class="report-section">
+        <h2>Failure Evidence</h2>
+
+        <!-- Screenshot -->
+        <h3 style="font-size: 0.95rem; margin-top: 1rem; margin-bottom: 0.5rem; color: #334155;">Screenshot</h3>
+        {% if bug.evidence.screenshot_url %}
+          <div class="screenshot-container">
+            <img src="{{ bug.evidence.screenshot_url }}" alt="Failure Screenshot" class="screenshot-img">
+          </div>
+        {% else %}
+          <p class="no-data">Screenshot not available.</p>
+        {% endif %}
+
+        <!-- Console Errors -->
+        <h3 style="font-size: 0.95rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #334155;">Console Errors</h3>
+        {% if bug.evidence.console_errors and bug.evidence.console_errors|length > 0 %}
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Message</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in bug.evidence.console_errors %}
+                <tr>
+                  <td><code>{{ log.type }}</code></td>
+                  <td>{{ log.text }}</td>
+                  <td><small>{{ log.location or 'N/A' }}</small></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="no-data">No console errors captured.</p>
+        {% endif %}
+
+        <!-- Failed Network Requests -->
+        <h3 style="font-size: 0.95rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #334155;">Network Errors (&ge; 400 or Failed)</h3>
+        {% if bug.evidence.network_errors and bug.evidence.network_errors|length > 0 %}
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>URL</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for net in bug.evidence.network_errors %}
+                <tr>
+                  <td><strong>{{ net.method }}</strong></td>
+                  <td>{{ net.url }}</td>
+                  <td><span style="color: var(--danger); font-weight: bold;">{{ net.status or net.failure or 'Failed' }}</span></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="no-data">No network errors captured.</p>
+        {% endif %}
+
+        <!-- Pytest Failure Output -->
+        <h3 style="font-size: 0.95rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #334155;">Test Failure Trace</h3>
+        {% if bug.evidence.failure_message %}
+          <pre><code>{{ bug.evidence.failure_message }}</code></pre>
+        {% else %}
+          <p class="no-data">No failure trace recorded.</p>
+        {% endif %}
+      </div>
+
+      <!-- 4. Environment -->
+      <div class="report-section">
+        <h2>Environment & Metadata</h2>
+        <div class="env-grid">
+          <div class="env-item">
+            <span>Application URL</span>
+            <strong>{{ bug.environment.app_url }}</strong>
+          </div>
+          <div class="env-item">
+            <span>Browser</span>
+            <strong>{{ bug.environment.browser }}</strong>
+          </div>
+          <div class="env-item">
+            <span>Planner Source</span>
+            <strong>{{ bug.environment.planner_source }}</strong>
+          </div>
+          <div class="env-item">
+            <span>Execution Timestamp</span>
+            <strong>{{ bug.environment.timestamp }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Generated by QA Agent. Verify before filing.
+    </footer>
+  </div>
+</body>
+</html>

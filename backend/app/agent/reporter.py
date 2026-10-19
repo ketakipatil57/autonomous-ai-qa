@@ -167,11 +167,12 @@ class Reporter:
         app_url: str,
         planner_source: str = "fallback",
         browser_name: str = "Chromium",
+        bug_index_offset: int = 0,
     ) -> list[BugReport]:
         """Generate bug reports for all confirmed FAILED results in a test session."""
         tc_map = {tc.id: tc for tc in plan.tests}
         reports: list[BugReport] = []
-        bug_index = 1
+        bug_index = bug_index_offset + 1
 
         for res in results:
             if res.status == "FAILED":

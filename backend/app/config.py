@@ -47,6 +47,15 @@ class Settings:
         "DATABASE_URL", "mysql+pymysql://qa_user:qa_password@localhost:3306/qa_agent"
     )
 
+    # CORS (Section 9)
+    CORS_ORIGINS: list[str] = [
+        o.strip()
+        for o in os.environ.get(
+            "CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+        ).split(",")
+        if o.strip()
+    ]
+
     # OpenAI (Optional)
     OPENAI_API_KEY: str | None = os.environ.get("OPENAI_API_KEY")
     OPENAI_MODEL: str = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")

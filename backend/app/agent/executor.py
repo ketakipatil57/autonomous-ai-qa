@@ -118,18 +118,20 @@ class TestExecutor:
         timeout_seconds: int | None = None,
     ) -> list[TestOutcome]:
         """Generate test files and execute the full test session via pytest."""
-        # 1. Generate pytest files
-        self.generate_suite(session_id, plan)
+        # Run only this plan's files; a regression suite may invoke the executor
+        # repeatedly in batches within the same session directory.
+        generated_files = self.generate_suite(session_id, plan)
 
         session_dir = self.get_session_dir(session_id)
         report_file = session_dir / "report.json"
+        test_targets = [str(path) for path in generated_files] or [str(session_dir)]
 
         # 2. Execute pytest with pytest-json-report
         cmd = [
             sys.executable,
             "-m",
             "pytest",
-            str(session_dir),
+            *test_targets,
             "--json-report",
             f"--json-report-file={report_file}",
             "-p",
